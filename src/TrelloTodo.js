@@ -53,6 +53,3 @@ class TrelloTodo{
 }
 
 module.exports = TrelloTodo;
-
-const test = new TrelloTodo();
-test.run();

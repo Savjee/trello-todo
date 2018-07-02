@@ -6,6 +6,6 @@ More documentation coming soon...
 
 Todo:
 - [x] Cleanup the Needle requests
-- [ ] Convert into a Serverless project (for AWS Lambda)
+- [x] Convert into a Serverless project (for AWS Lambda)
 - [ ] Add documentation (with examples & screenshot of Trello board)
 - [ ] Move cards that are due today
