@@ -1,6 +1,8 @@
 # Trello Todo
 
-Simple node.js script that looks at all the Trello cards in my "Todo" list. If a card is almost due (in the next 7 days) it moves it to the "Soon" list.
+Node.js script that automatically moves Trello cards when they are almost due (7 days) and when they are due:
+
+![]()
 
 More documentation coming soon...
 
@@ -9,3 +11,8 @@ Todo:
 - [x] Convert into a Serverless project (for AWS Lambda)
 - [ ] Add documentation (with examples & screenshot of Trello board)
 - [ ] Move cards that are due today
+
+## Run locally
+```
+npm run local
+```
