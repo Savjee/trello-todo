@@ -10,19 +10,38 @@ class TrelloTodo{
     async run() {
         const data = await this._makeTrelloRequest('get', `boards/${process.env.BOARD_ID}/cards`, null);
         const timeFrame = this._getTimeframe();
+        const allowedListIds = [process.env.BACKLOG_LIST_ID, process.env.SOON_LIST_ID];
 
         for (const card of data.body) {
 
             // Short circuit: we're not interested in cards that don't
-            // have a due date or that aren't in the first column.
-            if (!card.due || card.idList !== process.env.BACKLOG_LIST_ID) {
+            // have a due date or that aren't in the allowedListIds
+            // (Process cards in backlog & "soon" list)
+            if (!card.due || allowedListIds.indexOf(card.idList) === -1) {
                 continue;
             }
 
-            const dueDate = new Date(card.due).getTime();
-            console.log('Checking: ', card.name, card.due);
+            const dueDate = new Date(card.due);
+            const today = new Date();
+            console.log('Checking: ', card.name, card.due, card.idList);
 
-            if (dueDate >= Date.now() && dueDate <= timeFrame) {
+            // Check if the card is due today
+            if (dueDate.getDate() === today.getDate() &&
+                dueDate.getMonth() === today.getMonth() &&
+                dueDate.getFullYear() === today.getFullYear()) {
+
+                console.log('--> Due today! Moving card..', card.due, card.name);
+
+                await this._makeTrelloRequest('put', `cards/${card.id}`, {
+                    idList: process.env.TODAY_LIST_ID
+                });
+
+                // Don't bother doing anything else with this card
+                continue;
+            }
+
+            // Check if the card is due in the next 7 days
+            if (dueDate.getTime() >= Date.now() && dueDate.getTime() <= timeFrame) {
                 console.log('--> Almost due. Moving card..', card.due, card.name);
 
                 await this._makeTrelloRequest('put', `cards/${card.id}`, {
