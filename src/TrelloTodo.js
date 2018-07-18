@@ -10,7 +10,7 @@ class TrelloTodo{
     async run() {
         const data = await this._makeTrelloRequest('get', `boards/${process.env.BOARD_ID}/cards`, null);
         const timeFrame = this._getTimeframe();
-        const allowedListIds = [process.env.BACKLOG_LIST_ID, process.env.SOON_LIST_ID];
+        const allowedListIds = [process.env.BACKLOG_LIST_ID, process.env.SOON_LIST_ID, process.env.MONTH_LIST_ID];
 
         for (const card of data.body) {
 
@@ -32,9 +32,7 @@ class TrelloTodo{
 
                 console.log('--> Due today! Moving card..', card.due, card.name);
 
-                await this._makeTrelloRequest('put', `cards/${card.id}`, {
-                    idList: process.env.TODAY_LIST_ID
-                });
+                await this._moveCard(card, process.env.TODAY_LIST_ID);
 
                 // Don't bother doing anything else with this card
                 continue;
@@ -44,9 +42,16 @@ class TrelloTodo{
             if (dueDate.getTime() >= Date.now() && dueDate.getTime() <= timeFrame) {
                 console.log('--> Almost due. Moving card..', card.due, card.name);
 
-                await this._makeTrelloRequest('put', `cards/${card.id}`, {
-                    idList: process.env.SOON_LIST_ID
-                });
+                await this._moveCard(card, process.env.SOON_LIST_ID);
+
+                // Don't bother doing anything else with this card
+                continue;
+            }
+
+            if(dueDate.getTime() >= Date.now() && dueDate.getTime() <= this._getTimeframeForDays(30)){
+                console.log('--> Almost due (month). Moving card..', card.due, card.name);
+                await this._moveCard(card, process.env.MONTH_LIST_ID);
+                continue;
             }
 
             console.log(); // Empty line for nice logs
@@ -55,6 +60,12 @@ class TrelloTodo{
 
     _makeTrelloRequest(method, path, data) {
         return needle(method, `https://api.trello.com/1/${path}?key=${process.env.API_KEY}&token=${process.env.API_TOKEN}`, data);
+    }
+
+    _moveCard(cardObject, listId){
+        return this._makeTrelloRequest('put', `cards/${cardObject.id}`, {
+            idList: listId
+        }); 
     }
 
     _getTimeframe() {
@@ -67,6 +78,13 @@ class TrelloTodo{
 
         this.timeframeCache = today.getTime();
         return this.timeframeCache;
+    }
+
+    _getTimeframeForDays(days){
+        const today = new Date();
+        today.setDate(today.getDate() + parseInt(days));
+
+        return today.getTime();
     }
 
 }
