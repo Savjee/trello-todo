@@ -4,7 +4,7 @@ require('dotenv').config({ path: __dirname + '/.env' });
 class TrelloTodo{
 
     constructor() {
-        this.timeframeCache = null;
+        this.timeframeCache = [];
     }
 
     async run() {
@@ -72,10 +72,15 @@ class TrelloTodo{
     }
 
     _getTimeframeForDays(days){
+        if(this.timeframeCache[days]){
+            return this.timeframeCache[days];
+        }
+
         const today = new Date();
         today.setDate(today.getDate() + parseInt(days));
 
-        return today.getTime();
+        this.timeframeCache[days] = today.getTime();
+        return this.timeframeCache[days];
     }
 
 }
