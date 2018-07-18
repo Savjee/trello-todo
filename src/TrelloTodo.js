@@ -29,8 +29,6 @@ class TrelloTodo{
                 dueDate.getMonth() === today.getMonth() &&
                 dueDate.getFullYear() === today.getFullYear()) {
 
-                console.log('--> Due today! Moving card..', card.due, card.name);
-
                 await this._moveCard(card, process.env.TODAY_LIST_ID);
 
                 // Don't bother doing anything else with this card
@@ -46,7 +44,6 @@ class TrelloTodo{
             }
 
             if(dueDate.getTime() >= Date.now() && dueDate.getTime() <= this._getTimeframeForDays(30)){
-                console.log('--> Almost due (month). Moving card..', card.due, card.name);
                 await this._moveCard(card, process.env.MONTH_LIST_ID);
                 continue;
             }
@@ -60,14 +57,18 @@ class TrelloTodo{
     }
 
     _moveCard(cardObject, listId){
+
+        // If the card is already in the correct list, don't bother making
+        // an API call to Trello!
+        if(cardObject.idList === listId){
+            return Promise.resolve();
+        }
+
+        console.log('--> Moving card..', cardObject.due, cardObject.name);
+
         return this._makeTrelloRequest('put', `cards/${cardObject.id}`, {
             idList: listId
         }); 
-    }
-
-        }
-
-
     }
 
     _getTimeframeForDays(days){
