@@ -30,16 +30,12 @@ class TrelloTodo{
                 dueDate.getFullYear() === today.getFullYear()) {
 
                 await this._moveCard(card, process.env.TODAY_LIST_ID);
-
-                // Don't bother doing anything else with this card
                 continue;
             }
 
             // Check if the card is due in the next 7 days
             if (dueDate.getTime() >= Date.now() && dueDate.getTime() <= this._getTimeframeForDays(7)) {
                 await this._moveCard(card, process.env.SOON_LIST_ID);
-
-                // Don't bother doing anything else with this card
                 continue;
             }
 
