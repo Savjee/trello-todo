@@ -9,7 +9,6 @@ class TrelloTodo{
 
     async run() {
         const data = await this._makeTrelloRequest('get', `boards/${process.env.BOARD_ID}/cards`, null);
-        const timeFrame = this._getTimeframe();
         const allowedListIds = [process.env.BACKLOG_LIST_ID, process.env.SOON_LIST_ID, process.env.MONTH_LIST_ID];
 
         for (const card of data.body) {
@@ -39,9 +38,7 @@ class TrelloTodo{
             }
 
             // Check if the card is due in the next 7 days
-            if (dueDate.getTime() >= Date.now() && dueDate.getTime() <= timeFrame) {
-                console.log('--> Almost due. Moving card..', card.due, card.name);
-
+            if (dueDate.getTime() >= Date.now() && dueDate.getTime() <= this._getTimeframeForDays(7)) {
                 await this._moveCard(card, process.env.SOON_LIST_ID);
 
                 // Don't bother doing anything else with this card
@@ -68,16 +65,9 @@ class TrelloTodo{
         }); 
     }
 
-    _getTimeframe() {
-        if (this.timeframeCache !== null) {
-            return this.timeframeCache;
         }
 
-        const today = new Date();
-        today.setDate(today.getDate() + parseInt(process.env.LOOKAHEAD));
 
-        this.timeframeCache = today.getTime();
-        return this.timeframeCache;
     }
 
     _getTimeframeForDays(days){
