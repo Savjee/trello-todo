@@ -9,6 +9,9 @@ provider:
   memorySize: 128
   versionFunctions: false
 
+  deploymentBucket:
+    name: "xd-serverless-deployments"
+
 functions:
   moveAlmostDue:
     handler: src/lambda-handler.run
@@ -16,3 +19,7 @@ functions:
       - schedule:
           description: Frequently check Trello cards and more them when they are almost due
           rate: rate(1 hour)
+
+
+resources:
+  Description: "Personal - Move Trello cards based on due date"
