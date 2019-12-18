@@ -41,9 +41,6 @@ SOON_LIST_ID = ''
 
 # List that should contain cards due today
 TODAY_LIST_ID = ''
-
-# Card's due in the next LOOKAHEAD days will be moved to the SOON list
-LOOKAHEAD = 7
 ```
 
 Deploy it to AWS:
