@@ -1,3 +1,5 @@
+'use strict';
+
 const needle = require('needle');
 require('dotenv').config({ path: __dirname + '/.env' });
 
