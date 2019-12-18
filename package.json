@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "local": "sls invoke local --function moveAlmostDue",
-    "lint": "eslint src/TrelloTodo.js"
+    "lint": "eslint src/*.js"
   },
   "author": "Xavier Decuyper <hi@savjee.be>",
   "license": "MIT",
