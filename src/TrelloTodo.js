@@ -10,8 +10,16 @@ class TrelloTodo{
     }
 
     async run() {
-        const data = await this._makeTrelloRequest('get', `boards/${process.env.BOARD_ID}/cards`, null);
-        const allowedListIds = [process.env.BACKLOG_LIST_ID, process.env.SOON_LIST_ID, process.env.MONTH_LIST_ID];
+        const data = await this.constructor._makeTrelloRequest(
+            'get', 
+            `boards/${process.env.BOARD_ID}/cards`, null
+        );
+
+        const allowedListIds = [
+            process.env.BACKLOG_LIST_ID, 
+            process.env.SOON_LIST_ID, 
+            process.env.MONTH_LIST_ID
+        ];
 
         for (const card of data.body) {
 
@@ -36,12 +44,14 @@ class TrelloTodo{
             }
 
             // Check if the card is due in the next 7 days
-            if (dueDate.getTime() >= Date.now() && dueDate.getTime() <= this._getTimeframeForDays(7)) {
+            if (dueDate.getTime() >= Date.now() && 
+                dueDate.getTime() <= this._getTimeframeForDays(7)) {
                 await this._moveCard(card, process.env.SOON_LIST_ID);
                 continue;
             }
 
-            if(dueDate.getTime() >= Date.now() && dueDate.getTime() <= this._getTimeframeForDays(30)){
+            if(dueDate.getTime() >= Date.now() && 
+                dueDate.getTime() <= this._getTimeframeForDays(30)){
                 await this._moveCard(card, process.env.MONTH_LIST_ID);
                 continue;
             }
@@ -50,8 +60,12 @@ class TrelloTodo{
         }
     }
 
-    _makeTrelloRequest(method, path, data) {
-        return needle(method, `https://api.trello.com/1/${path}?key=${process.env.API_KEY}&token=${process.env.API_TOKEN}`, data);
+    static _makeTrelloRequest(method, path, data) {
+        const url = `https://api.trello.com/1/${path}` + 
+                        `?key=${process.env.API_KEY}` + 
+                        `&token=${process.env.API_TOKEN}`;
+        
+        return needle(method, url, data);
     }
 
     _moveCard(cardObject, listId){
@@ -64,7 +78,7 @@ class TrelloTodo{
 
         console.log('--> Moving card..', cardObject.due, cardObject.name);
 
-        return this._makeTrelloRequest('put', `cards/${cardObject.id}`, {
+        return this.constructor._makeTrelloRequest('put', `cards/${cardObject.id}`, {
             idList: listId
         }); 
     }
