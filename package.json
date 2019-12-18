@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "local": "sls invoke local --function moveAlmostDue"
+    "local": "sls invoke local --function moveAlmostDue",
+    "lint": "eslint src/TrelloTodo.js"
   },
   "author": "Xavier Decuyper <hi@savjee.be>",
   "license": "MIT",
@@ -13,5 +14,8 @@
     "dotenv": "^6.0.0",
     "needle": "^2.2.1",
     "trello-node-api": "0.0.6"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.2"
   }
 }
