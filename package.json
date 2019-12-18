@@ -12,8 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^6.0.0",
-    "needle": "^2.2.1",
-    "trello-node-api": "0.0.6"
+    "needle": "^2.2.1"
   },
   "devDependencies": {
     "eslint": "^6.7.2",
