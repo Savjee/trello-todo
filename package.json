@@ -16,6 +16,7 @@
     "trello-node-api": "0.0.6"
   },
   "devDependencies": {
-    "eslint": "^6.7.2"
+    "eslint": "^6.7.2",
+    "eslint-config-google": "^0.14.0"
   }
 }
