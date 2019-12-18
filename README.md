@@ -1,7 +1,8 @@
 # Serverless Trello Todo
 
-![Build status badge](https://github.com/Savjee/trello-todo/workflows/Node%20CI/badge.svg)
+![Serverless badge](http://public.serverless.com/badges/v3.svg)
 ![MIT License badge](https://img.shields.io/github/license/Savjee/trello-todo)
+![Build status badge](https://github.com/Savjee/trello-todo/workflows/Node%20CI/badge.svg)
 ![Open issues](https://img.shields.io/github/issues/Savjee/trello-todo)
 
 Node.js script that automatically moves Trello cards to the "Soon" list when they are due within the next 7 days. Moves cards to "Today" list when they are due today.
