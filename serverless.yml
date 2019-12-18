@@ -2,7 +2,7 @@ service: xd-trello-todo
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   profile: serverless-personal
   region: eu-west-1
   stage: prod
